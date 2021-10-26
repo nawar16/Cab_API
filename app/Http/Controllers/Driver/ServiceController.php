@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers\Driver;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\APIController;
 use Illuminate\Http\Request;
 use App\Models\Service;
 use App\Models\VariantDriver;
 use App\Models\Taxi;
 use App\Models\InfoCar;
 
-class ServiceController extends Controller
+class ServiceController extends APIController
 {
     public function my_services(Request $request)
     {
@@ -39,7 +39,7 @@ class ServiceController extends Controller
                     ]
                 ];
             });
-            return success_response($data);
+            return $this->success_response($data);
         } else{
             $data = [
                 'status' => false,
@@ -50,7 +50,7 @@ class ServiceController extends Controller
             return response()->json($data, 500);
         }
       } catch(\Exception $ex){
-            return error_response($ex);
+            return $this->error_response($ex);
       }
     }
     public function ok_service(Request $request)
@@ -65,7 +65,7 @@ class ServiceController extends Controller
                         'state' => 'old'
                     ]);
                 });
-                return success_response($data);
+                return $this->success_response($data);
             } else{
                 $data = [
                     'status' => false,
@@ -76,7 +76,7 @@ class ServiceController extends Controller
                 return response()->json($data, 500);
             }
           } catch(\Exception $ex){
-                return error_response($ex);
+                return $this->error_response($ex);
           }
     }
     public function new_position(Request $request)
@@ -90,9 +90,9 @@ class ServiceController extends Controller
                 'longitude' => $request->coordinates['lng']
             ]);
             $data = $driver->variants()->save($variant);
-            return success_response($data);
+            return $this->success_response($data);
         } catch(\Exception $ex){
-            return error_response($ex);
+            return $this->error_response($ex);
         }
     }
     public function busy_position(Request $request)
@@ -107,10 +107,10 @@ class ServiceController extends Controller
                         'status' => 0
                     ]);
                 });
-                return success_response($data);
+                return $this->success_response($data);
             }
         } catch(\Exception $ex){
-            return error_response($ex);
+            return $this->error_response($ex);
         }
     }
     public function new_car(Request $request)
@@ -128,9 +128,9 @@ class ServiceController extends Controller
                 'info_car_id' => $info->id
             ]);
             $data = $driver->taxis()->save($taxi);
-            return success_response($data);
+            return $this->success_response($data);
         } catch(\Exception $ex){
-            return error_response($ex);
+            return $this->error_response($ex);
         }
     }
     public function delete_car(Request $request)
@@ -142,11 +142,11 @@ class ServiceController extends Controller
                 $car->drivers()->detach();
                 InfoCar::whereId($car->info_car->id)->delete();
                 $data = $car->delete();
-                return success_response($data);
+                return $this->success_response($data);
             }
-            return error_response(new \Illuminate\Database\Eloquent\ModelNotFoundException);
+            return $this->error_response(new \Illuminate\Database\Eloquent\ModelNotFoundException);
         } catch(\Exception $ex){
-            return error_response($ex);
+            return $this->error_response($ex);
         }
     }
 }

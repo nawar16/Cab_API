@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\APIController;
 use Illuminate\Http\Request;
 use App\Models\VariantDriver;
 use App\Models\Client;
@@ -12,7 +12,7 @@ use App\Models\Fee;
 use App\Models\Service;
 use DB;
 
-class ServiceController extends Controller
+class ServiceController extends APIController
 {
     public function near_taxi(Request $request)
     {
@@ -34,9 +34,9 @@ class ServiceController extends Controller
         $avg_calls = DB::select(DB::raw('select AVG(qualification) as avg from services GROUP BY services.driver_id'));
 
          $drivers['avg_calls'] = $avg_calls;
-        return success_response($drivers);
+        return $this->success_response($drivers);
       } catch(\Exception $ex){
-          return error_response($ex);
+          return $this->error_response($ex);
       }
     } 
     public function service_notification(Request $request)
@@ -68,9 +68,9 @@ class ServiceController extends Controller
           'destination_coordinate' => $request->destination_coor,
           'state' => 'new'
         ]);
-        return success_response($service);
+        return $this->success_response($service);
       } catch(\Exception $ex){
-        return error_response($ex);
+        return $this->error_response($ex);
       }
 
     }
@@ -88,9 +88,9 @@ class ServiceController extends Controller
             'qualification' => $request->qualification['cal']
           ]);
         }
-        return success_response($service);
+        return $this->success_response($service);
       } catch(\Exception $ex){
-        return error_response($ex);
+        return $this->error_response($ex);
       }
     }
 

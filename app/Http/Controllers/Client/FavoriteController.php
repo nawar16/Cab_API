@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\APIController;
 use Illuminate\Http\Request;
 use App\Models\Client;
 use App\Models\Favorite;
 
-class FavoriteController extends Controller
+class FavoriteController extends APIController
 {
     public function favorites(Request $request)
     {
@@ -25,7 +25,7 @@ class FavoriteController extends Controller
                         ]
                     ];
                 });
-                return success_response($data);
+                return $this->success_response($data);
             } else{
                 $data = [
                     'status' => false,
@@ -35,7 +35,7 @@ class FavoriteController extends Controller
                 return response()->json($data);
             }
         } catch(\Exception $ex){
-            return error_response($ex);
+            return $this->error_response($ex);
         }
     }
     public function new_favorites(Request $request)
@@ -55,7 +55,7 @@ class FavoriteController extends Controller
             if($new_fav)
             {
                 $data = ['msg' => 'Favorite Added'];
-                return success_response($data);
+                return $this->success_response($data);
             } else{
                 $data = [
                     'status' => false,
@@ -65,7 +65,7 @@ class FavoriteController extends Controller
                 return response()->json($data, 500);
             }
         } catch(\Exception $ex){
-            return error_response($ex);
+            return $this->error_response($ex);
         }
     }
     public function delete_favorite(Request $request)
@@ -81,12 +81,12 @@ class FavoriteController extends Controller
                     $fav->deleted_at = \Carbon\Carbon::now();
                     $fav->save();
                     $data = ['msg' => 'Favorite Deleted'];
-                    return success_response($data);
+                    return $this->success_response($data);
                 }
             }
-            return error_response(new \Illuminate\Database\Eloquent\ModelNotFoundException);
+            return $this->error_response(new \Illuminate\Database\Eloquent\ModelNotFoundException);
         } catch(\Exception $ex){
-            return error_response($ex);
+            return $this->error_response($ex);
         }
     }
     public function update_favorite(Request $request)
@@ -103,12 +103,12 @@ class FavoriteController extends Controller
                     $fav->updated_at = \Carbon\Carbon::now();
                     $fav->save();
                     $data = ['msg' => 'Favorite Updated'];
-                    return success_response($data);
+                    return $this->success_response($data);
                 }
             }
-            return error_response(new \Illuminate\Database\Eloquent\ModelNotFoundException);
+            return $this->error_response(new \Illuminate\Database\Eloquent\ModelNotFoundException);
         } catch(\Exception $ex){
-            return error_response($ex);
+            return $this->error_response($ex);
         }
     }
 }
